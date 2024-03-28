@@ -27,9 +27,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @GetMapping("/hello-world")
+    public String getAllUsers() {
+        return "Hello World! anbatocom"; // "return userService.getAllUsers();"
+        // return userService.getAllUsers();
     }
 
     @PostMapping
