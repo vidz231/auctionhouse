@@ -1,34 +1,42 @@
 package com.fptgang.auctionhouse.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.fptgang.auctionhouse.model.Orchid;
+import com.fptgang.auctionhouse.model.Role;
 import com.fptgang.auctionhouse.model.User;
+import com.fptgang.auctionhouse.repository.OrchidRepository;
+import com.fptgang.auctionhouse.repository.RoleRepository;
 import com.fptgang.auctionhouse.repository.UserRepository;
-
-import io.micrometer.common.lang.NonNull;
+import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+  private UserRepository userRepository;
+  private RoleRepository roleRepository;
+  private OrchidRepository orchidRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+  public UserService(
+    UserRepository userRepository,
+    RoleRepository roleRepository,
+    OrchidRepository orchidRepository
+  ) {
+    this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
+    this.orchidRepository = orchidRepository;
+  }
 
-    public User createUser(User user) {
-        User savedUser = userRepository.save(user);
-        if (savedUser == null) {
-            throw new RuntimeException("Failed to create user");
-        }
-        return savedUser;
-    }
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
+  }
 
+  public List<Orchid> test() {
+    return orchidRepository.findAll();
+  }
+
+  @SuppressWarnings("null")
+  public User createUser(User user) {
+    User savedUser = userRepository.save(user);
+    return savedUser;
+  }
 }

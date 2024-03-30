@@ -1,46 +1,70 @@
 package com.fptgang.auctionhouse.model;
 
-import java.util.List;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.sql.Date;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "[User]")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
-    private String username;
-    private String password;
-    private String role;
-    @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "ID")
-    private List<Product> products;
 
-    public User() {
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
-    public User(String username, String password, String role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
+  @Column(name = "name")
+  private String name;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "ID=" + ID +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
-                '}';
-    }
+  @Column(name = "email")
+  private String email;
 
+  @Column(name = "password")
+  private String password;
+
+  @Column(name = "phone_number")
+  private String phoneNumber;
+
+  @Column(name = "address")
+  private String address;
+
+  @Column(name = "dob")
+  private Date dob;
+
+  @Column(name = "gender")
+  private String gender;
+
+  @Column(name = "avatar_url")
+  private String avatarUrl;
+
+  @Column(name = "is_banned")
+  private String isBanned;
+
+  @Column(name = "created_at")
+  private Date createdAt;
+
+  @Column(name = "updated_at")
+  private Date updatedAt;
+
+  @ManyToOne
+  @JoinColumn(name = "auth_type")
+  private Auth auth;
+
+  @ManyToOne
+  @JoinColumn(name = "roleId")
+  private Role role;
 }

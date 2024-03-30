@@ -15,13 +15,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Product")
-public class Product {
+@Table(name = "Country")
+public class Country {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long ID;
+  private Long id;
 
   private String name;
-  private String description;
 }
