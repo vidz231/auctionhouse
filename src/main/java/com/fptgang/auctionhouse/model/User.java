@@ -10,9 +10,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.sql.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "[User]")
@@ -20,6 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
 
   @Id
@@ -48,16 +52,21 @@ public class User {
   @Column(name = "gender")
   private String gender;
 
-  @Column(name = "avatar_url")
+  @Column(
+    name = "avatar_url",
+    columnDefinition = "varchar(MAX) default 'https://robohash.org/eumtemporaest.png?size=50x50&set=set1'"
+  )
   private String avatarUrl;
 
-  @Column(name = "is_banned")
-  private String isBanned;
+  @Column(name = "is_banned", columnDefinition = "BIT DEFAULT 0")
+  private Boolean isBanned;
 
   @Column(name = "created_at")
+  @CreationTimestamp
   private Date createdAt;
 
   @Column(name = "updated_at")
+  @UpdateTimestamp
   private Date updatedAt;
 
   @ManyToOne
@@ -65,6 +74,6 @@ public class User {
   private Auth auth;
 
   @ManyToOne
-  @JoinColumn(name = "roleId")
+  @JoinColumn(name = "role_id")
   private Role role;
 }

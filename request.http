@@ -1,0 +1,46 @@
+###> Get all user
+GET http://localhost:8080/users/
+
+###> Get user
+GET http://localhost:8080/users/1000
+
+###> Register user
+POST http://localhost:8080/users/
+Content-Type: application/json
+
+{
+    "name": "John",
+    "email": "test2@gmail.com",
+    "password": "password",
+    "confirmPassword": "password",
+    "phoneNumber": "1231232548",
+    "address": "243 Le Hong Phong Str",
+    "dob": "01/01/2000",
+    "gender": "Male",
+    "avatarUrl": "http://localhost:8080/users/1000",
+    "roleId": "2"
+}
+
+###> Update user
+PUT http://localhost:8080/users/1004
+Content-Type: application/json
+
+{
+    "name": "John",
+    "email": "update@gmail.com",
+    "phoneNumber": "123122332548",
+    "address": "243 Le Hong Phong Str",
+    "dob": "01/01/2000",
+    "gender": "Male",
+    "avatarUrl": "http://localhost:8080/users/Ahihihoho"
+}
+
+
+###> Delete user
+DELETE http://localhost:8080/users/1006
+Content-Type: application/json
+
+###> Ban user
+PUT http://localhost:8080/users/ban/1004
+Content-Type: application/json
+
