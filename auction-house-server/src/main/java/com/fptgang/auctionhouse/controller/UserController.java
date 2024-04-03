@@ -4,7 +4,7 @@ import com.fptgang.auctionhouse.dto.user.CreateUserDTO;
 import com.fptgang.auctionhouse.dto.user.UpdateUserDTO;
 import com.fptgang.auctionhouse.dto.user.UserDTO;
 import com.fptgang.auctionhouse.exception.ErrorResponse;
-import com.fptgang.auctionhouse.service.impl.UserServiceImpl;
+import com.fptgang.auctionhouse.service.UserService;
 import java.util.Date;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-  private UserServiceImpl userService;
+  private UserService userService;
 
-  public UserController(UserServiceImpl userService) {
+  public UserController(UserService userService) {
     this.userService = userService;
   }
 
