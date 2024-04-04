@@ -1,10 +1,11 @@
 package com.fptgang.auctionhouse.model;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,13 +20,16 @@ import lombok.Setter;
 @Table(name = "Favorite")
 public class Favorite {
 
-  @Id
+  @EmbeddedId
+  private FavoriteKey key;
+
+  @MapsId("userId")
   @ManyToOne
   @JoinColumn(name = "user_id")
   @JsonIncludeProperties({ "id", "name" })
   private User user;
 
-  @Id
+  @MapsId("productId")
   @ManyToOne
   @JoinColumn(name = "product_id")
   @JsonIncludeProperties({ "id", "name" })
