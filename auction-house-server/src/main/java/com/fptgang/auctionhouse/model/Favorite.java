@@ -16,8 +16,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Follow")
-public class Follow {
+@Table(name = "Favorite")
+public class Favorite {
 
   @Id
   @ManyToOne
@@ -27,7 +27,7 @@ public class Follow {
 
   @Id
   @ManyToOne
-  @JoinColumn(name = "following_id")
+  @JoinColumn(name = "product_id")
   @JsonIncludeProperties({ "id", "name" })
-  private User following;
+  private Product product;
 }

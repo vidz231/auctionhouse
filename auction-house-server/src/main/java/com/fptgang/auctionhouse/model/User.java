@@ -61,6 +61,8 @@ public class User {
   @Column(name = "is_banned", columnDefinition = "BIT DEFAULT 0")
   private Boolean isBanned;
 
+  
+
   @Column(name = "created_at")
   @CreationTimestamp
   private Date createdAt;

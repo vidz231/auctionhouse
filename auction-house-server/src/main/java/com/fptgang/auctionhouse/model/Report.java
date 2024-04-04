@@ -21,12 +21,17 @@ import org.hibernate.annotations.CreationTimestamp;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Auction")
-public class Auction {
+@Table(name = "Report")
+public class Report {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  @JsonIncludeProperties({ "id", "name" })
+  private User user;
 
   @ManyToOne
   @JoinColumn(name = "product_id")
@@ -34,32 +39,18 @@ public class Auction {
   private Product product;
 
   @ManyToOne
-  @JoinColumn(name = "employee_id")
-  @JsonIncludeProperties({ "id", "name" })
-  private User employee;
+  @JoinColumn(name = "report_type_id")
+  @JsonIncludeProperties({ "name" })
+  private ReportType reportType;
 
-  @ManyToOne
-  @JoinColumn(name = "winner_id")
-  @JsonIncludeProperties({ "id", "name" })
-  private User winner;
+  @Column(name = "description")
+  private String description;
 
-  @Column(name = "amount")
-  private Integer amount;
+  @Column(name = "is_resolved")
+  private Boolean isResolved;
 
-  // @Column(name = "start_price")
-  private Double startPrice;
-
-  // @Column(name = "step_price")
-  private Double stepPrice;
-
-  // @Column(name = "current_price")
-  private Double currentPrice;
-
-  // @Column(name = "start_time")
-  private Date startTime;
-
-  // @Column(name = "end_time")
-  private Date endTime;
+  @Column(name = "resolve_message")
+  private String resolveMessage;
 
   @Column(name = "created_at")
   @CreationTimestamp

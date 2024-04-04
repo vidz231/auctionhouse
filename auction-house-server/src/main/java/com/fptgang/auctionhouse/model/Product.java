@@ -1,5 +1,6 @@
 package com.fptgang.auctionhouse.model;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,7 @@ public class Product {
 
   @ManyToOne
   @JoinColumn(name = "owner_id")
+  @JsonIncludeProperties({ "id", "name" })
   private User owner;
 
   @Column(name = "name")

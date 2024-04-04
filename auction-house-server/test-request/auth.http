@@ -1,0 +1,17 @@
+###> Login
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin1",
+    "password": "1"
+}
+
+###> Search with token
+GET http://localhost:8080/users/search?name=ab
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjdXN0b21lcjEiLCJpYXQiOjE3MTIxOTkyNDEsImV4cCI6MTcxMjIwNDI0MX0.2Ky4f43OI_EBwJcQgxsbxRGSgckHf7Dp_y5ttmgPt8liCG1WoBv8IDKY9sW11C8IpAqAOIQetYBRtZtbhom-cw
+
+###> Search without token
+GET http://localhost:8080/users/search?name=ab
+Content-Type: application/json

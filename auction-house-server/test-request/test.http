@@ -1,0 +1,3 @@
+###> Search product
+GET http://localhost:8080/test/3
+Content-Type: application/json

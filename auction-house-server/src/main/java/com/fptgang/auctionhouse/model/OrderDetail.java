@@ -1,6 +1,7 @@
 package com.fptgang.auctionhouse.model;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -16,18 +17,27 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Follow")
-public class Follow {
+@Table(name = "Order_Detail")
+public class OrderDetail {
 
   @Id
   @ManyToOne
-  @JoinColumn(name = "user_id")
-  @JsonIncludeProperties({ "id", "name" })
-  private User user;
+  @JoinColumn(name = "order_id")
+  @JsonIncludeProperties({ "id" })
+  private Order order;
 
   @Id
   @ManyToOne
-  @JoinColumn(name = "following_id")
+  @JoinColumn(name = "product_id")
   @JsonIncludeProperties({ "id", "name" })
-  private User following;
+  private Product product;
+
+  @Column(name = "price")
+  private Double price;
+
+  @Column(name = "amount")
+  private Integer amount;
+
+  @Column(name = "is_feedbacked")
+  private Boolean isFeedbacked;
 }
