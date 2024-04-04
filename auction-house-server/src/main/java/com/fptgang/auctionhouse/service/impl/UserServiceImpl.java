@@ -155,9 +155,6 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> getByUserName(String name) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException(
-      "Unimplemented method 'getByUserName'"
-    );
+    return userRepository.findByNameContaining(name);
   }
 }

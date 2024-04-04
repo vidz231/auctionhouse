@@ -6,6 +6,7 @@ import com.fptgang.auctionhouse.dto.user.UserDTO;
 import com.fptgang.auctionhouse.exception.ErrorResponse;
 import com.fptgang.auctionhouse.service.UserService;
 import java.util.Date;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -68,5 +69,10 @@ public class UserController {
   public ResponseEntity<Object> ban(@PathVariable Long id) {
     UserDTO bannedUser = userService.banUser(id);
     return ResponseEntity.ok(bannedUser);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<Object> getAllUsers(@Param("name") String name) {
+    return ResponseEntity.ok(userService.getByUserName(name));
   }
 }

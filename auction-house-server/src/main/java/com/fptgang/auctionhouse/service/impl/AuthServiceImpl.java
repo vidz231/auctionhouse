@@ -46,10 +46,11 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public UserDTO login(LoginDTO loginDTO) {
-    User user = userRepository.findByEmail(loginDTO.getEmail());
-    if (user == null) {
-      throw new ResourceNotFoundException("User", "email", loginDTO.getEmail());
-    }
+    User user = userRepository
+      .findByEmail(loginDTO.getEmail())
+      .orElseThrow(() ->
+        new ResourceNotFoundException("User", "email", loginDTO.getEmail())
+      );
     return mapToDTO(user);
   }
 
