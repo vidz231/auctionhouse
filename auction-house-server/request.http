@@ -49,7 +49,15 @@ POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-    "email": "customer12",
+    "email": "admin1",
     "password": "1"
 }
 
+###> Search with token
+GET http://localhost:8080/users/search?name=ab
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbjEiLCJpYXQiOjE3MTIxOTcyOTUsImV4cCI6MTcxMjIwMjI5NX0.z_QCxBB6DxsbgWNPhq3J95vGAm4xrAiLBo3bXBQyQFqq2da0NBD5euzBLV_PfxTr32xNPzU8vjWQkqA6230C7Q
+
+###> Search without token
+GET http://localhost:8080/users/search?name=ab
+Content-Type: application/json

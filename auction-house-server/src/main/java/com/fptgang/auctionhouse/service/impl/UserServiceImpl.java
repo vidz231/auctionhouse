@@ -155,6 +155,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> getByUserName(String name) {
+    System.out.println("Im in search");
     return userRepository.findByNameContaining(name);
   }
 }

@@ -2,35 +2,41 @@ package com.fptgang.auctionhouse.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.NoOpAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-  private CustomerUserDetailService userDetailService;
+  private CustomUserDetailService userDetailService;
+  private JWTAuthEntryPoint jwtAuthEntryPoint;
 
-  public SecurityConfig(CustomerUserDetailService userDetailService) {
+  public SecurityConfig(
+    CustomUserDetailService userDetailService,
+    JWTAuthEntryPoint jwtAuthEntryPoint
+  ) {
     this.userDetailService = userDetailService;
+    this.jwtAuthEntryPoint = jwtAuthEntryPoint;
   }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
       .csrf(authorize -> authorize.disable())
+      .exceptionHandling(authorize ->
+        authorize.authenticationEntryPoint(jwtAuthEntryPoint)
+      )
+      .sessionManagement(authorize ->
+        authorize.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      )
       .authorizeHttpRequests(authorize ->
         authorize
           .requestMatchers("/users/search")
@@ -44,6 +50,10 @@ public class SecurityConfig {
       )
       .httpBasic(Customizer.withDefaults())
       .formLogin(Customizer.withDefaults());
+    http.addFilterBefore(
+      jwtAuthenticationFilter(),
+      UsernamePasswordAuthenticationFilter.class
+    );
     return http.build();
   }
 
@@ -57,5 +67,10 @@ public class SecurityConfig {
   @Bean
   PasswordEncoder passwordEncoder() {
     return new TestPasswordEncoder();
+  }
+
+  @Bean
+  public JWTAuthenticationFilter jwtAuthenticationFilter() {
+    return new JWTAuthenticationFilter();
   }
 }
