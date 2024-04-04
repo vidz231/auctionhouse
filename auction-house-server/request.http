@@ -56,7 +56,7 @@ Content-Type: application/json
 ###> Search with token
 GET http://localhost:8080/users/search?name=ab
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbjEiLCJpYXQiOjE3MTIxOTcyOTUsImV4cCI6MTcxMjIwMjI5NX0.z_QCxBB6DxsbgWNPhq3J95vGAm4xrAiLBo3bXBQyQFqq2da0NBD5euzBLV_PfxTr32xNPzU8vjWQkqA6230C7Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjdXN0b21lcjEiLCJpYXQiOjE3MTIxOTkyNDEsImV4cCI6MTcxMjIwNDI0MX0.2Ky4f43OI_EBwJcQgxsbxRGSgckHf7Dp_y5ttmgPt8liCG1WoBv8IDKY9sW11C8IpAqAOIQetYBRtZtbhom-cw
 
 ###> Search without token
 GET http://localhost:8080/users/search?name=ab

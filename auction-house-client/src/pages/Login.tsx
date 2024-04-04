@@ -21,9 +21,10 @@ export default function Login() {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-    const user = await POST("/auth/login", data);
-    console.log(user);
+    const response = await POST("/auth/login", data);
+    if (response.accessToken) {
+      document.cookie = `accessToken=${response.accessToken}`;
+    }
   };
   return (
     <div className="h-screen w-screen flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -47,14 +48,12 @@ export default function Login() {
             <div className="flex flex-col mt-2 items-start">
               <input
                 id="email"
-                // name="email"
                 type="text"
                 // type="email"
                 autoComplete="email"
                 placeholder="Email"
-                // required
                 className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
-                // defaultValue="test@a"
+                defaultValue="customer1"
                 {...register("email", { required: true })}
               />
               {errors.email && <ErrorText>This field is required</ErrorText>}
@@ -81,13 +80,11 @@ export default function Login() {
             <div className="flex flex-col mt-2 items-start">
               <input
                 id="password"
-                // name="password"
                 type="password"
                 placeholder="Password"
-                // required
                 autoComplete="current-password"
                 className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
-                // defaultValue="test"
+                defaultValue="1"
                 {...register("password", { required: true })}
               />
               {errors.password && <ErrorText>This field is required</ErrorText>}
