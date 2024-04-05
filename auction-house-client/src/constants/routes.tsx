@@ -1,3 +1,6 @@
+import Test from "../components/Test";
+import HomeLayout from "../layouts/HomeLayout";
+import Error from "../pages/Error";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -5,7 +8,18 @@ import Register from "../pages/Register";
 const routes = [
   {
     path: "/",
-    element: <Home />,
+    element: <HomeLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        element: <Home />,
+        path: "/",
+      },
+      {
+        element: <Test />,
+        path: "/test",
+      },
+    ],
   },
   {
     path: "/login",
@@ -14,10 +28,6 @@ const routes = [
   {
     path: "/register",
     element: <Register />,
-  },
-  {
-    path: "/test",
-    element: <div>Hello test!</div>,
   },
 ];
 

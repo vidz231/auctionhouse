@@ -1,16 +1,14 @@
-import React from "react";
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
+import { Outlet } from "react-router-dom";
 
-export default function HomeLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function HomeLayout() {
   return (
     <div>
       <TopNav />
-      {children}
+      <div className="m-4 border h-screen">
+        <Outlet />
+      </div>
       <Footer />
     </div>
   );

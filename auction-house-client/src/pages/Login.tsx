@@ -24,6 +24,7 @@ export default function Login() {
     const response = await POST("/auth/login", data);
     if (response.accessToken) {
       document.cookie = `accessToken=${response.accessToken}`;
+      // router
     }
   };
   return (
