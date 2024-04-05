@@ -104,7 +104,7 @@ export default function TopNav() {
       </div>
       <a
         href="./login"
-        className="bg-black text-white font-bold justify-center items-center rounded-xl text-sm py-2 px-4 inline-block"
+        className="bg-black text-white font-bold justify-center items-center rounded-md text-sm py-1 px-4 inline-block"
       >
         Login
       </a>

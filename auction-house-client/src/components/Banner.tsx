@@ -31,7 +31,6 @@ export default function Banner() {
           </div>
         </div>
         <div className="w-full flex justify-center items-center">
-          {/* <div> */}
           <div className="aspect-video h-5/6 flex">
             <div
               className="aspect-square w-4/6 rounded-lg bg-no-repeat bg-cover bg-center"
@@ -49,8 +48,6 @@ export default function Banner() {
               </div>
             </div>
           </div>
-
-          {/* </div> */}
         </div>
       </div>
     </div>
