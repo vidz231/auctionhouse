@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { POST } from "../utils/request";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authSlice";
 
 type Inputs = {
   email: string;
@@ -16,6 +18,7 @@ const ErrorText = ({ children }: { children: React.ReactNode }) => {
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -25,6 +28,7 @@ export default function Login() {
     const response = await POST("/auth/login", data);
     if (response.accessToken) {
       document.cookie = `accessToken=${response.accessToken}`;
+      dispatch(login());
       navigate("/");
     }
   };

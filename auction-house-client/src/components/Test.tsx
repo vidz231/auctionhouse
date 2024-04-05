@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { setCookie } from "../utils/cookie";
 import { GET } from "../utils/request";
+import { Button } from "@mui/material";
 
 const TempButton = ({
   children,
@@ -24,11 +25,11 @@ export default function Test() {
     setCookie("accessToken", "", 0);
   };
   const handleTestApi = async () => {
-    const data = await GET("/users/1");
+    const data = await GET("/api/users/1");
     console.log(data);
   };
   const handleTestPrivateApi = async () => {
-    const data = await GET("/users/search?name=a");
+    const data = await GET("/api/users/search?name=a");
     console.log(data);
   };
   return (
@@ -53,6 +54,9 @@ export default function Test() {
       >
         Test private api
       </div>
+      <Button variant="text" className="bg-red-300 hover:bg-blue-400">
+        Text
+      </Button>
     </div>
   );
 }
