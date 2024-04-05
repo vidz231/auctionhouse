@@ -14,13 +14,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(value = ResourceNotFoundException.class)
   public ResponseEntity<Object> handleResourceNotFoundException(Exception ex) {
-    ErrorResponse error = new ErrorResponse(ex.getMessage(), new Date());
+    ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),ex.getMessage(), new Date());
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(value = InvalidInputException.class)
   public ResponseEntity<Object> handleBadRequestException(Exception ex) {
-    ErrorResponse error = new ErrorResponse(ex.getMessage(), new Date());
+    ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),ex.getMessage(), new Date());
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 }
