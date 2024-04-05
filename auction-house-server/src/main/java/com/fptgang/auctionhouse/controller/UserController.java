@@ -33,8 +33,9 @@ public class UserController {
     UserDTO createdUser = userService.createUser(userDTO);
     if (createdUser == null) {
       return new ResponseEntity<>(
-        new ErrorResponse("Register failed", new Date()),
-        HttpStatus.BAD_REQUEST
+
+        new ErrorResponse(HttpStatus.BAD_REQUEST.value(),"Register failed", new Date()),
+              HttpStatus.BAD_REQUEST
       );
     }
     return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
