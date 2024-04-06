@@ -6,7 +6,7 @@ export default function HomeLayout() {
   return (
     <div>
       <TopNav />
-      <div className="m-4 border h-screen">
+      <div className="m-4">
         <Outlet />
       </div>
       <Footer />

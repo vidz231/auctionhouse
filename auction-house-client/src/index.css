@@ -22,3 +22,22 @@ div#root {
 a {
   text-decoration: none;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5555555e;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555555ad;
+}
+
+@layer utilities {
+  .without-ring {
+    @apply focus-visible:outline-none;
+  }
+}

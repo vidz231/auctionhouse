@@ -36,7 +36,7 @@ export default function SideNav() {
       </div>
       <Divider />
       <div>
-        <NavItem icon={<EqualizerIcon fontSize="small" />} href="./dashboard">
+        <NavItem icon={<EqualizerIcon fontSize="small" />} href="./">
           Dashboard
         </NavItem>
         <NavItem icon={<SpaIcon fontSize="small" />} href="./product">
