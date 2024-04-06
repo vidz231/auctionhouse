@@ -1,4 +1,5 @@
 import Banner from "../../components/Banner";
+import AuctionItem from "./components/AuctionItem";
 import ProductItem from "./components/ProductItem";
 import SidebarItem from "./components/SidebarItem";
 
@@ -11,16 +12,24 @@ export default function Home() {
           <div className="col-span-9">
             <div className="font-bold text-xl mb-4">Current live auction</div>
             <div className="grid grid-cols-2 gap-4">
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
+              <AuctionItem />
+              <AuctionItem />
+              <AuctionItem />
+              <AuctionItem />
+              <AuctionItem />
             </div>
             <hr className="mt-8" />
             <div className="font-bold text-xl my-4">Upcoming auction</div>
             <div className="grid grid-cols-2 gap-4">
-              <ProductItem />
+              <AuctionItem />
+              <AuctionItem />
+              <AuctionItem />
+              <AuctionItem />
+              <AuctionItem />
+            </div>
+            <hr className="mt-8" />
+            <div className="font-bold text-xl my-4">Featured product</div>
+            <div className="grid grid-cols-2 gap-4">
               <ProductItem />
               <ProductItem />
               <ProductItem />
