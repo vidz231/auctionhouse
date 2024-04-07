@@ -14,6 +14,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ProductDetail from "../pages/product/Product";
 import AuctionDetail from "./../pages/auction/Auction";
+import Search from "../pages/search/Search";
+import Shop from "../pages/shop/Shop";
 
 const routes = [
   {
@@ -36,6 +38,14 @@ const routes = [
       {
         path: "/auction",
         element: <AuctionDetail />,
+      },
+      {
+        path: "/search",
+        element: <Search />,
+      },
+      {
+        path: "/shop",
+        element: <Shop />,
       },
     ],
   },
