@@ -29,7 +29,7 @@ const ReceiveItem = () => {
     <div className="flex justify-end">
       <div>
         <span className="bg-white w-full gap-2 text-sm p-2 border border-black rounded-md">
-          Hello, how are you today ahhihi ahihi ahihi?
+          Hello, how are you today ahhihi ahihi ahihi ayyo?
         </span>
       </div>
     </div>
