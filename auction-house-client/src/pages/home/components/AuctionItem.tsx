@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
 
+/**
+ * Renders an auction item component.
+ * @param {Object} props - The component props.
+ * @param {any} props.product - The product data for the auction item.
+ * @returns {JSX.Element} The rendered auction item component.
+ */
 export default function AuctionItem({ product }: { product: any }) {
   // console.log(product._links.image);
   const [image, setImage] = useState("");

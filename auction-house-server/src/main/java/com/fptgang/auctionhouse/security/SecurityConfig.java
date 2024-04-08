@@ -27,9 +27,8 @@ public class SecurityConfig {
   private JWTAuthEntryPoint jwtAuthEntryPoint;
 
   public SecurityConfig(
-    CustomUserDetailService userDetailService,
-    JWTAuthEntryPoint jwtAuthEntryPoint
-  ) {
+      CustomUserDetailService userDetailService,
+      JWTAuthEntryPoint jwtAuthEntryPoint) {
     this.userDetailService = userDetailService;
     this.jwtAuthEntryPoint = jwtAuthEntryPoint;
   }
@@ -38,39 +37,35 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
       .cors(Customizer.withDefaults())
-      .csrf(authorize -> authorize.disable())
-      .exceptionHandling(authorize ->
-        authorize.authenticationEntryPoint(jwtAuthEntryPoint)
-      )
-      .sessionManagement(authorize ->
-        authorize.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      )
-      .authorizeHttpRequests(authorize ->
-        authorize
-          // .requestMatchers("/*")
-          // .authenticated()
-          // .requestMatchers("/users/*")
-          // .permitAll()
-          // .requestMatchers("/auth/*")
-          // .permitAll()
-          // .requestMatchers("/test/*")
-          .anyRequest()
-          .permitAll()
-      // .authenticated()
-      )
-      .httpBasic(Customizer.withDefaults())
-      .formLogin(Customizer.withDefaults());
+        .csrf(authorize -> authorize.disable())
+        .exceptionHandling(authorize -> authorize.authenticationEntryPoint(jwtAuthEntryPoint))
+        .sessionManagement(authorize -> authorize.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(authorize -> authorize
+//            .requestMatchers("/api/products")
+//            .permitAll()
+//            .requestMatchers("/api/users")
+//            .permitAll()
+//            .requestMatchers("/api/users/*")
+//            .permitAll()
+//            .requestMatchers("/auth/*")
+//            .permitAll()
+//            .requestMatchers("/api/products/*")
+//            .permitAll()
+//            .requestMatchers("/api/categories/*")
+             .anyRequest()
+             .permitAll()
+            )
+        .httpBasic(Customizer.withDefaults())
+        .formLogin(Customizer.withDefaults());
     http.addFilterBefore(
-      jwtAuthenticationFilter(),
-      UsernamePasswordAuthenticationFilter.class
-    );
+        jwtAuthenticationFilter(),
+        UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
 
   @Bean
   public AuthenticationManager authenticationManager(
-    AuthenticationConfiguration authenticationConfiguration
-  ) throws Exception {
+      AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
 

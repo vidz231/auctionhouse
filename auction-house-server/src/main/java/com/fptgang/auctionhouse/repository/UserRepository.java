@@ -11,4 +11,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface UserRepository extends JpaRepository<User, Long> {
   List<User> findByNameContaining(String name);
   Optional<User> findByEmail(String email);
+
 }

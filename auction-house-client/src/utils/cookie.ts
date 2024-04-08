@@ -1,3 +1,8 @@
+/**
+ * Retrieves the value of a cookie by its name.
+ * @param cookieName - The name of the cookie to retrieve.
+ * @returns The value of the cookie, or an empty string if the cookie is not found.
+ */
 export function getCookie(cookieName: string) {
   const name = cookieName + "=";
   const decodedCookie = decodeURIComponent(document.cookie);
@@ -14,6 +19,12 @@ export function getCookie(cookieName: string) {
   return "";
 }
 
+/**
+ * Sets a cookie with the specified name, value, and expiration time.
+ * @param cookieName - The name of the cookie.
+ * @param cookieValue - The value to be stored in the cookie.
+ * @param cookieExp - The expiration time of the cookie in days.
+ */
 export function setCookie(
   cookieName: string,
   cookieValue: string,

@@ -1,14 +1,10 @@
 package com.fptgang.auctionhouse.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
 import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,56 +22,55 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Builder
 public class User {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "name")
-  private String name;
+    @Column(name = "name")
+    private String name;
 
-  @Column(name = "email")
-  private String email;
+    @Column(name = "email")
+    private String email;
 
-  @Column(name = "password")
-  private String password;
+    @Column(name = "password")
+    private String password;
 
-  @Column(name = "phone_number")
-  private String phoneNumber;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-  @Column(name = "address")
-  private String address;
+    @Column(name = "address")
+    private String address;
 
-  @Column(name = "dob")
-  private Date dob;
+    @Column(name = "dob")
+    private Date dob;
 
-  @Column(name = "gender")
-  private String gender;
+    @Column(name = "gender")
+    private String gender;
 
-  @Column(
-    name = "avatar_url",
-    columnDefinition = "varchar(MAX) default 'https://robohash.org/eumtemporaest.png?size=50x50&set=set1'"
-  )
-  private String avatarUrl;
+    @Column(name = "avatar_url",
+//    columnDefinition = "varchar(MAX) default 'https://robohash.org/eumtemporaest.png?size=50x50&set=set1'"
+            columnDefinition = "varchar(MAX) "
+    )
+    private String avatarUrl = "https://robohash.org/eumtemporaest.png?size=50x50&set=set1";
 
-  @Column(name = "is_banned", columnDefinition = "BIT DEFAULT 0")
-  private Boolean isBanned;
+    @Column(name = "is_banned", columnDefinition = "BIT DEFAULT 0")
+    private Boolean isBanned = false;
 
-  
+    @JsonIgnore
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private Date createdAt;
 
-  @Column(name = "created_at")
-  @CreationTimestamp
-  private Date createdAt;
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private Date updatedAt;
 
-  @Column(name = "updated_at")
-  @UpdateTimestamp
-  private Date updatedAt;
+    @ManyToOne(cascade=CascadeType.REMOVE)
+    @JoinColumn(name = "auth_type")
+    private Auth auth;
 
-  @ManyToOne
-  @JoinColumn(name = "auth_type")
-  private Auth auth;
-
-  @ManyToOne
-  @JoinColumn(name = "role_id")
-  private Role role;
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "role_id")
+    private Role role;
 }
