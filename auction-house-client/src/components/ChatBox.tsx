@@ -1,6 +1,7 @@
 import { Chat, ExpandMore } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { hide, show } from "../redux/chatSlice";
 
 const BoxItem = () => {
   return (
@@ -37,9 +38,16 @@ const ReceiveItem = () => {
 };
 
 export default function ChatBox() {
-  const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+  const showModal = useSelector((state: any) => state.chat.isShowed);
+  const chattingWith = useSelector((state: any) => state.chat.chattingWith);
+
   const handleChatModel = () => {
-    setShowModal(!showModal);
+    if (showModal) {
+      dispatch(hide());
+    } else {
+      dispatch(show());
+    }
   };
   return (
     <div className="fixed bottom-0 right-8">
@@ -68,7 +76,7 @@ export default function ChatBox() {
             </div>
             <div className="col-span-8 relative">
               <div className="font-semibold px-2 py-1 border-b border-black">
-                Shop name
+                {chattingWith}
               </div>
               <div className="px-2 py-3 flex flex-col gap-5 flex-shrink">
                 <SendItem />

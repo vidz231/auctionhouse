@@ -1,6 +1,12 @@
+import { useDispatch } from "react-redux";
 import ProductItem from "./components/ProductItem";
+import { chatWith } from "../../redux/chatSlice";
 
 export default function Shop() {
+  const dispatch = useDispatch();
+  const handleChat = () => {
+    dispatch(chatWith(949));
+  };
   return (
     <div>
       <div className="bg-slate-200 grid grid-cols-3 border rounded-md px-16 gap-8">
@@ -18,7 +24,10 @@ export default function Shop() {
             <div className="w-full py-0.5 px-2 bg-blue-500 hover:bg-blue-400 rounded-md text-white font-semibold text-sm flex justify-center">
               Follow
             </div>
-            <div className="w-full py-0.5 px-2 bg-blue-500 hover:bg-blue-400 rounded-md text-white font-semibold text-sm flex justify-center">
+            <div
+              className="w-full py-0.5 px-2 bg-blue-500 hover:bg-blue-400 rounded-md text-white font-semibold text-sm flex justify-center"
+              onClick={handleChat}
+            >
               Chat
             </div>
           </div>
