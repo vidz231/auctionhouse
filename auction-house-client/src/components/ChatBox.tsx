@@ -2,6 +2,9 @@ import { Chat, ExpandMore } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { hide, show } from "../redux/chatSlice";
+import SockJS from "sockjs-client";
+import { over } from "stompjs";
+import { useEffect } from "react";
 
 const BoxItem = () => {
   return (
@@ -41,6 +44,25 @@ export default function ChatBox() {
   const dispatch = useDispatch();
   const showModal = useSelector((state: any) => state.chat.isShowed);
   const chattingWith = useSelector((state: any) => state.chat.chattingWith);
+  let stompClient = null;
+
+  useEffect(() => {
+    connect();
+  }, []);
+
+  const connect = () => {
+    const Sock = new SockJS("http://localhost:8080/ws");
+    stompClient = over(Sock);
+    stompClient.connect({}, onConnected, onError);
+  };
+
+  const onError = (error: any) => {
+    console.log(error);
+  };
+
+  const onConnected = () => {
+    console.log("connected");
+  };
 
   const handleChatModel = () => {
     if (showModal) {
