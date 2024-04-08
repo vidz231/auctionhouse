@@ -7,9 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.sql.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,6 +53,10 @@ public class Product {
   @ManyToOne
   @JoinColumn(name = "made_in")
   private Country madeIn;
+
+  @OneToMany
+  @JoinColumn(name = "product_id")
+  private List<Image> image;
 
   @Column(name = "remain")
   private Integer remain;

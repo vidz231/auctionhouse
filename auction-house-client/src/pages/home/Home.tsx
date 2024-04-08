@@ -11,7 +11,7 @@ export default function Home() {
     (async () => {
       let products = (await GET("/api/products?page=1"))._embedded.products;
       // products = await GET("/product/1");
-      console.log(products);
+      // console.log(products);
       setProducts(products);
     })();
   }, []);
@@ -30,16 +30,16 @@ export default function Home() {
             <hr className="mt-8" />
             <div className="font-bold text-xl my-4">Upcoming auction</div>
             <div className="grid grid-cols-2 gap-4">
-              {products.map((product: any) => (
+              {/* {products.map((product: any) => (
                 <AuctionItem key={product.id} product={product} />
-              ))}
+              ))} */}
             </div>
             <hr className="mt-8" />
             <div className="font-bold text-xl my-4">Featured product</div>
             <div className="grid grid-cols-2 gap-4">
-              {products.map((product: any) => (
+              {/* {products.map((product: any) => (
                 <AuctionItem key={product.id} product={product} />
-              ))}
+              ))} */}
               {/* <ProductItem /> */}
               {/* <ProductItem /> */}
               {/* <ProductItem /> */}
