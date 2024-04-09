@@ -20,7 +20,7 @@ public class ChatController {
       "/private",
       message
     );
-    // System.out.println(message.toString());
+    System.out.println(message.toString());
     return message;
   }
 }

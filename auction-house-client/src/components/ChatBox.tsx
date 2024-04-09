@@ -73,7 +73,19 @@ export default function ChatBox() {
   const messageEnd = useRef(null);
 
   useEffect(() => {
-    connect();
+    (async () => {
+      const userList = (
+        await GET(`/api/messages/search/findUsersContactedWith?id=${userId}`)
+      )._embedded.users;
+      let receiver;
+      if (chattingWith == 0) {
+        receiver = userList[0];
+      } else {
+        receiver = await GET(`/api/users/${chattingWith}`);
+      }
+      setReceiver(receiver);
+      connect();
+    })();
   }, []);
 
   useEffect(() => {
@@ -135,7 +147,8 @@ export default function ChatBox() {
   };
 
   const onConnected = () => {
-    console.log("connected");
+    stompClient.subscribe("/user/" + receiver.id + "/private");
+    console.log("connected with " + receiver.id + " ahiihi");
   };
 
   const handleChatModel = () => {
@@ -178,6 +191,13 @@ export default function ChatBox() {
         })
       );
       setMessageUI(messageUI);
+      if (stompClient) {
+        stompClient.send(
+          "/app/private-message",
+          {},
+          JSON.stringify(returnData)
+        );
+      }
     }
   };
 
