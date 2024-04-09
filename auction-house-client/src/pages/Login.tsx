@@ -28,8 +28,8 @@ export default function Login() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const response = await POST("/auth/login", data);
     if (response.accessToken) {
-      setCookie("accessToken", response.accessToken, 0.5);
-      setCookie("username", response.username, 0.5);
+      setCookie("accessToken", response.accessToken, 1);
+      setCookie("userId", response.userId, 1);
       dispatch(login());
       navigate("/");
     }

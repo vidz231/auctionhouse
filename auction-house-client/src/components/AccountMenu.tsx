@@ -4,13 +4,11 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Logout from "@mui/icons-material/Logout";
 import { setCookie } from "../utils/cookie";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/authSlice";
 import { useEffect, useState } from "react";
@@ -19,7 +17,7 @@ import { getCookie } from "./../utils/cookie";
 
 export default function AccountMenu() {
   const [avatarUrl, setAvatarUrl] = useState("");
-  const username = getCookie("username");
+  const userId = getCookie("userId");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -38,12 +36,10 @@ export default function AccountMenu() {
   };
   useEffect(() => {
     (async () => {
-      let avatarUrl = (
-        await GET(`/api/users/search/findByEmail?email=${username}`)
-      ).avatarUrl;
+      const avatarUrl = (await GET(`/api/users/${userId}`)).avatarUrl;
       setAvatarUrl(avatarUrl);
     })();
-  }, []);
+  }, [avatarUrl, userId]);
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -59,7 +55,7 @@ export default function AccountMenu() {
             <Avatar
               sx={{ width: 32, height: 32 }}
               src={avatarUrl}
-              alt={username}
+              alt={userId}
               className="border"
             ></Avatar>
           </IconButton>

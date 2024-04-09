@@ -1,6 +1,10 @@
 package com.fptgang.auctionhouse.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fptgang.auctionhouse.repository.projection.SenderExcerp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +38,13 @@ public class Message {
   @ManyToOne
   @JoinColumn(name = "sender_id")
   @JsonIncludeProperties({ "id", "name" })
+  // @JsonIncludeProperties({ "senderExcerp" })
+  // @JsonIdentityInfo(
+  //   generator = ObjectIdGenerators.PropertyGenerator.class,
+  //   property = "id",
+  //   scope = SenderExcerp.class
+  // )
+  // @JsonIdentityReference(alwaysAsId = true)
   private User sender;
 
   @ManyToOne

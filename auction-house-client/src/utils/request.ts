@@ -26,7 +26,6 @@ export const GET = async (url: string) => {
  * @returns A Promise that resolves to the response data.
  */
 export const POST = async (url: string, body: any) => {
-  console.log(getCookie("accessToken"));
   const data: any = await (
     await fetch(import.meta.env.VITE_SERVER_URL + url, {
       method: "POST",

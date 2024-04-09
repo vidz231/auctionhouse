@@ -10,5 +10,5 @@ import lombok.Data;
 public class AuthResponseDTO {
 
   private String accessToken;
-  private String username;
+  private Long userId;
 }

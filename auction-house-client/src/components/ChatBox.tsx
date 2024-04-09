@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { chatWith, hide, show } from "../redux/chatSlice";
 import SockJS from "sockjs-client";
 import { over } from "stompjs";
-import { useEffect, useState } from "react";
-import { GET } from "../utils/request";
+import { useEffect, useRef, useState } from "react";
+import { GET, POST } from "../utils/request";
+import { getCookie } from "../utils/cookie";
+import { getPattern } from "../utils/regex";
 
 const BoxItem = ({
   name,
@@ -33,22 +35,24 @@ const BoxItem = ({
   );
 };
 
-const SendItem = () => {
+const SendItem = ({ message }: { message: string }) => {
   return (
-    <div>
-      <span className="bg-white w-full gap-2 text-sm p-2 border border-black rounded-md">
-        Hello, how are you today ahhihi ahihi ahihi?
-      </span>
+    <div className="flex justify-start">
+      <div>
+        <span className="bg-white w-full gap-2 text-sm p-2 border border-black rounded-md">
+          {message}
+        </span>
+      </div>
     </div>
   );
 };
 
-const ReceiveItem = () => {
+const ReceiveItem = ({ message }: { message: string }) => {
   return (
     <div className="flex justify-end">
       <div>
         <span className="bg-white w-full gap-2 text-sm p-2 border border-black rounded-md">
-          Hello, how are you today ahhihi ahihi ahihi ayyo?
+          {message}
         </span>
       </div>
     </div>
@@ -58,22 +62,67 @@ const ReceiveItem = () => {
 export default function ChatBox() {
   const dispatch = useDispatch();
   const [userList, setUserList] = useState([]);
+  const [messageList, setMessageList] = useState<any[]>([]);
+  const [message, setMessage] = useState("");
+  const userId = getCookie("userId");
   const showModal = useSelector((state: any) => state.chat.isShowed);
   const { chattingWith } = useSelector((state: any) => state.chat);
   const [receiver, setReceiver] = useState();
   let stompClient = null;
+  const [messageUI, setMessageUI] = useState([]);
+  const messageEnd = useRef(null);
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   useEffect(() => {
     (async () => {
       const userList = (
-        await GET("/api/messages/search/findUsersContactedWith?id=949")
+        await GET(`/api/messages/search/findUsersContactedWith?id=${userId}`)
       )._embedded.users;
       setUserList(userList);
-      const receiver = await GET(`/api/users/${chattingWith}`);
+      let receiver;
+      if (chattingWith == 0) {
+        receiver = userList[0];
+      } else {
+        receiver = await GET(`/api/users/${chattingWith}`);
+      }
       setReceiver(receiver);
+      const messageList = (
+        await GET(
+          `/api/messages/search/findMessagesBetweenUsers?userId1=${userId}&userId2=${receiver.id}`
+        )
+      )._embedded.messages;
+      setMessageList(messageList);
+      const messageUI = await Promise.all(
+        messageList.map(async (item: any) => {
+          const senderId = (
+            await GET(
+              String(item._links.sender.href).replace(
+                import.meta.env.VITE_SERVER_URL,
+                ""
+              )
+            )
+          ).id;
+          return senderId === receiver.id ? (
+            <SendItem key={item.id} message={item.message} />
+          ) : (
+            <ReceiveItem key={item.id} message={item.message} />
+          );
+        })
+      );
+      setMessageUI(messageUI);
+      // console.log(messageEnd);
+      scrollToBottom();
     })();
-    connect();
   }, [showModal, chattingWith]);
+
+  const scrollToBottom = () => {
+    if (messageEnd.current) {
+      messageEnd.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  };
 
   const connect = () => {
     const Sock = new SockJS("http://localhost:8080/ws");
@@ -96,6 +145,42 @@ export default function ChatBox() {
       dispatch(show());
     }
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messageUI]);
+
+  const handleEnter = async (e: any) => {
+    if (e.key == "Enter") {
+      const messageData = {
+        message,
+        sender: import.meta.env.VITE_SERVER_URL + `/users/${userId}`,
+        receiver: import.meta.env.VITE_SERVER_URL + `/users/${receiver.id}`,
+      };
+      const returnData = await POST("/api/messages", messageData);
+      setMessageList([...messageList, returnData]);
+      setMessage("");
+      const messageUI = await Promise.all(
+        [...messageList, returnData].map(async (item: any) => {
+          const senderId = (
+            await GET(
+              String(item._links.sender.href).replace(
+                import.meta.env.VITE_SERVER_URL,
+                ""
+              )
+            )
+          ).id;
+          return senderId === receiver.id ? (
+            <SendItem key={item.id} message={item.message} />
+          ) : (
+            <ReceiveItem key={item.id} message={item.message} />
+          );
+        })
+      );
+      setMessageUI(messageUI);
+    }
+  };
+
   return (
     <div className="fixed bottom-0 right-8">
       {!showModal ? (
@@ -138,16 +223,16 @@ export default function ChatBox() {
                   {receiver && receiver.name}
                 </div>
               </div>
-              <div className="px-2 py-3 flex flex-col gap-5 flex-shrink">
-                <SendItem />
-                <ReceiveItem />
-                <SendItem />
-                <SendItem />
-                <ReceiveItem />
+              <div className="px-2 pt-3 flex flex-col gap-4 flex-shrink bg-yellow-400 h-[345px] overflow-y-scroll">
+                {messageList && receiver && messageUI}
+                <div ref={messageEnd}></div>
               </div>
               <textarea
                 className="absolute bottom-10 resize-none h-16 border without-ring w-full p-2 border-t bg-white text-black text-sm"
                 placeholder="Write message"
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={handleEnter}
+                value={message}
               />
             </div>
           </div>
