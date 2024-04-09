@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { POST } from "../utils/request";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authSlice";
+import { setCookie } from "../utils/cookie";
 
 type Inputs = {
   email: string;
@@ -27,7 +28,8 @@ export default function Login() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const response = await POST("/auth/login", data);
     if (response.accessToken) {
-      document.cookie = `accessToken=${response.accessToken}`;
+      setCookie("accessToken", response.accessToken, 0.5);
+      setCookie("username", response.username, 0.5);
       dispatch(login());
       navigate("/");
     }

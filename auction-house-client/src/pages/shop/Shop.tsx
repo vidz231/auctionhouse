@@ -1,16 +1,58 @@
+import { useDispatch } from "react-redux";
 import ProductItem from "./components/ProductItem";
+import { chatWith } from "../../redux/chatSlice";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { GET } from "../../utils/request";
+
+const InfoItem = ({ name, value }: { name: string; value: string }) => {
+  return (
+    <div className="row-span-1">
+      {name}:
+      <span className="ml-2 text-blue-500 font-semibold">
+        {Number(value) ? Number(value).toLocaleString() : value}
+      </span>
+    </div>
+  );
+};
 
 export default function Shop() {
+  const [tab, setTab] = useState();
+
+  const { id } = useParams();
+  const [products, setProducts] = useState([]);
+  const [owner, setOwner] = useState();
+  const dispatch = useDispatch();
+  const handleChat = () => {
+    dispatch(chatWith(id));
+  };
+  window.scrollTo(0, 0);
+  useEffect(() => {
+    (async () => {
+      const owner = await GET(`/api/users/${id}`);
+      const products = (await GET(`/api/users/${id}/products`))._embedded
+        .products;
+      setProducts(products);
+      setOwner(owner);
+    })();
+  }, []);
   return (
     <div>
       <div className="bg-slate-200 grid grid-cols-3 border rounded-md px-16 gap-8">
-        <div className="bg-red-200">
+        <div className="bg-purple-200">
           <div className="flex px-2 pt-2">
-            <div className="bg-red-300 aspect-square h-[80px]">Image</div>
+            {owner && (
+              <div
+                className="border rounded-md aspect-square h-[80px] bg-no-repeat bg-cover bg-center"
+                style={{ backgroundImage: `url(${owner.avatarUrl})` }}
+              ></div>
+            )}
             <div className="ml-2">
-              <div className="font-bold text-white text-xl">Shop name</div>
+              <div className="font-bold text-white text-xl">
+                {owner && owner.name}
+              </div>
               <div className="text-slate-500 text-base italic">
-                Tp.HCM, Vietnam
+                {owner && owner.address}
               </div>
             </div>
           </div>
@@ -18,33 +60,23 @@ export default function Shop() {
             <div className="w-full py-0.5 px-2 bg-blue-500 hover:bg-blue-400 rounded-md text-white font-semibold text-sm flex justify-center">
               Follow
             </div>
-            <div className="w-full py-0.5 px-2 bg-blue-500 hover:bg-blue-400 rounded-md text-white font-semibold text-sm flex justify-center">
+            <div
+              className="w-full py-0.5 px-2 bg-blue-500 hover:bg-blue-400 rounded-md text-white font-semibold text-sm flex justify-center"
+              onClick={handleChat}
+            >
               Chat
             </div>
           </div>
         </div>
         <div className="h-full flex flex-col justify-between py-4">
-          <div className="row-span-1">
-            Products:{" "}
-            <span className="ml-1 text-blue-500 font-semibold">123</span>
-          </div>
-          <div className="row-span-1">
-            Feedbacks: <span>123</span>
-          </div>
-          <div className="row-span-1">
-            Selled: <span>123</span>
-          </div>
+          <InfoItem name="Products" value={products.length} />
+          <InfoItem name="Feedbacks" value="45623" />
+          <InfoItem name="Selled" value="45623" />
         </div>
         <div className="h-full flex flex-col justify-between py-4">
-          <div className="row-span-1">
-            Followers: <span>123</span>
-          </div>
-          <div className="row-span-1">
-            Rating: <span>123</span>
-          </div>
-          <div className="row-span-1">
-            Created at: <span>123</span>
-          </div>
+          <InfoItem name="Followers" value="45623" />
+          <InfoItem name="Rating" value="45623" />
+          <InfoItem name="Created at" value="45623" />
         </div>
       </div>
       <div>
@@ -61,12 +93,8 @@ export default function Shop() {
             <div className="py-1">Ahihi</div>
           </div>
           <div className="col-span-10 grid grid-cols-4 gap-4 p-4">
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
+            {products.length > 0 &&
+              products.map((product: any) => <ProductItem product={product} />)}
           </div>
         </div>
       </div>

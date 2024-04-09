@@ -1,37 +1,61 @@
 import { Breadcrumbs, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FeedbackItem from "./components/FeedbackItem";
+import { useEffect, useState } from "react";
+import { GET } from "../../utils/request";
 
 export default function SellProduct() {
+  const [product, setProduct] = useState();
+  const [image, setImage] = useState([]);
+  const [owner, setOwner] = useState();
+  const { id } = useParams();
   window.scrollTo(0, 0);
+  useEffect(() => {
+    (async () => {
+      const product = await GET(`/api/products/${id}`);
+      const owner = await GET(`/api/products/${id}/owner`);
+      const image = await GET(`/api/products/${id}/image`);
+      setProduct(product);
+      setOwner(owner);
+      setImage(image._embedded.images.map((item: any) => item.url));
+    })();
+  }, []);
   return (
     <div>
       <Breadcrumbs aria-label="breadcrumb">
         <Link to="/">Sell</Link>
         <Link to="/">Other</Link>
-        <Typography color="text.primary">
-          The name of a auction product
-        </Typography>
+        <Typography color="text.primary">{product && product.name}</Typography>
       </Breadcrumbs>
       <div>
         <div className="rounded-md flex gap-4 mt-4 p-2">
           <div className="flex flex-col gap-4">
-            <div className="bg-red-300 aspect-square h-[80px]">Image</div>
-            <div className="bg-red-300 aspect-square h-[80px]">Image</div>
-            <div className="bg-red-300 aspect-square h-[80px]">
-              <div></div>
-            </div>
+            {image &&
+              image.length >= 2 &&
+              image
+                .slice(1)
+                .map((item) => (
+                  <div
+                    className="bg-red-300 aspect-square h-[80px] bg-no-repeat bg-cover bg-center"
+                    style={{ backgroundImage: `url(${item})` }}
+                  ></div>
+                ))}
+            {/* <div className="bg-red-300 aspect-square h-[80px]">Image</div> */}
+            {/* <div className="bg-red-300 aspect-square h-[80px]"></div> */}
           </div>
-          <div className="bg-red-300 aspect-square h-[480px]">Image</div>
+          <div
+            className="bg-red-300 aspect-square h-[480px] bg-no-repeat bg-cover bg-center"
+            style={{ backgroundImage: `url(${image[0]})` }}
+          ></div>
           <div className="mt-2 mx-4 text-xl flex flex-col gap-2">
-            <div className="font-bold text-md">
-              The name of a auction product
-            </div>
+            <div className="font-bold text-md">{product && product.name}</div>
             <div className="text-md text-slate-500 italic">
-              by Nguyen Van Hieu
+              by {owner && owner.name}
             </div>
             <div className="">Vietnam</div>
-            <div className="font-bold">$123045</div>
+            <div className="font-semibold">
+              ${Number(product && product.price).toLocaleString()}
+            </div>
             <div className="flex gap-4">
               <Link
                 to="/product"
@@ -52,63 +76,23 @@ export default function SellProduct() {
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-8">
               <div className="font-bold text-xl mb-4">Description</div>
-              <div>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Curabitur sagittis sagittis quam ac tincidunt. Praesent in
-                ultrices ipsum. Morbi vulputate tortor ligula, quis feugiat erat
-                finibus eget. Aliquam erat volutpat. Morbi euismod faucibus
-                ligula, non aliquam purus imperdiet eget. Etiam blandit tempus
-                odio. Fusce aliquam molestie felis eu ultricies. Nullam vel
-                laoreet enim. Nam sed ante erat. Mauris ut varius neque. Fusce
-                ut massa justo. Suspendisse non quam quis libero sollicitudin
-                egestas vel at erat. Proin maximus justo sed nibh semper
-                molestie. Nam id nulla quis nunc dictum tincidunt. Maecenas
-                convallis diam id est vehicula, fermentum viverra magna
-                efficitur. Aliquam scelerisque vel velit vel feugiat.
-                Suspendisse potenti. Suspendisse ultrices, massa convallis
-                rhoncus aliquet, sem orci blandit arcu, ac tincidunt ipsum magna
-                eu odio. Praesent tempus varius vehicula. Nunc et sodales enim,
-                sit amet sagittis sapien. Nunc ut odio elementum, lobortis nunc
-                et, tempus ipsum. Duis id sagittis eros. Proin viverra hendrerit
-                risus, vitae euismod lacus ullamcorper sed. In semper rhoncus
-                varius. Vivamus laoreet nec dui nec tempus. Maecenas ac purus
-                mauris. Nunc at orci ac nisi condimentum pharetra. Duis ac
-                aliquam nisl, ut finibus justo. Cras placerat urna at neque
-                iaculis tempus. Vivamus eu mauris nisi. Duis tincidunt eu lectus
-                ac egestas. Aenean nibh massa, porta sed hendrerit venenatis,
-                pulvinar ut nibh. Praesent ac posuere nisi. Maecenas maximus
-                dictum metus. Integer finibus lacus at accumsan pellentesque.
-                Vestibulum porttitor diam sed est pharetra fermentum. Lorem
-                ipsum dolor sit amet, consectetur adipiscing elit. Duis egestas
-                erat et justo pharetra malesuada. Etiam eu magna at lectus
-                tempor accumsan. Integer consequat at dolor vel ultricies.
-                Integer vehicula urna quam. Nulla vel nunc nec velit suscipit
-                auctor vel nec nulla. In hac habitasse platea dictumst. Donec
-                eget diam a turpis finibus euismod eu a tortor. Mauris auctor
-                diam a felis tempus condimentum. Quisque ac ex commodo,
-                pellentesque felis eu, pharetra nunc. Nullam nibh elit, dapibus
-                ac purus nec, blandit bibendum dui. Aenean blandit a leo eget
-                volutpat. Aliquam lobortis, mi nec tincidunt suscipit, mauris
-                neque imperdiet mi, eu fermentum justo eros non elit. In hac
-                habitasse platea dictumst. Etiam dictum, nibh et maximus
-                finibus, nunc ex mollis nisl, vitae interdum massa dolor vitae
-                dui. Integer at metus auctor, ultrices orci a, eleifend diam.
-                Aliquam nec nunc ullamcorper, consequat diam ac, consequat odio.
-                Ut nunc massa, imperdiet eu libero aliquet, fermentum dignissim
-                odio. Suspendisse id blandit felis.
-              </div>
+              <div>{product && product.description}</div>
               <div className="text-slate-500 cursor-pointer">Read less</div>
             </div>
             <div className="col-span-4">
               <div className="font-bold text-xl mb-4">Seller</div>
-              <div className="flex gap-4">
-                <div className="bg-red-300 aspect-square h-[100px]">Image</div>
+              <Link to={`/shop/${owner && owner.id}`} className="flex gap-4">
+                {owner && (
+                  <div
+                    className="border rounded-md aspect-square h-[100px] bg-no-repeat bg-cover bg-center"
+                    style={{ backgroundImage: `url(${owner.avatarUrl})` }}
+                  ></div>
+                )}
                 <div>
-                  <div>Seller name</div>
-                  <div>Follower</div>
-                  <div>Address</div>
+                  <div className="font-semibold">{owner && owner.name}</div>
+                  <div className="">{owner && owner.address}</div>
                 </div>
-              </div>
+              </Link>
             </div>
             <div className="col-span-8">
               <div className="font-bold text-xl mb-4">Feedback</div>

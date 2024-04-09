@@ -32,7 +32,7 @@ const routes = [
         path: "/test",
       },
       {
-        path: "/product",
+        path: "/product/:id",
         element: <ProductDetail />,
       },
       {
@@ -44,7 +44,7 @@ const routes = [
         element: <Search />,
       },
       {
-        path: "/shop",
+        path: "/shop/:id",
         element: <Shop />,
       },
     ],

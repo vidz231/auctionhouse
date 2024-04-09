@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import SearchBar from "./SearchBar";
 import AccountMenu from "./AccountMenu";
-import { getCookie } from "../utils/cookie";
 
 const TopNavItem = ({
   children,
@@ -22,16 +21,14 @@ const TopNavItem = ({
 
 export default function TopNav() {
   const isLoged = useSelector((state: any) => state.auth.isLoged);
-  console.log(isLoged);
-  console.log("access: " + getCookie("accessToken"));
 
   return (
     <div className="border-b flex justify-between items-center gap-4 py-2 px-4">
       <div className="flex gap-4">
-        <TopNavItem href="./">Home</TopNavItem>
-        <TopNavItem href="./auction">Category</TopNavItem>
-        <TopNavItem href="./auction">Auction</TopNavItem>
-        <TopNavItem href="./test">Test API</TopNavItem>
+        <TopNavItem href="/">Home</TopNavItem>
+        <TopNavItem href="/auction">Category</TopNavItem>
+        <TopNavItem href="/auction">Auction</TopNavItem>
+        <TopNavItem href="/test">Test API</TopNavItem>
       </div>
       <SearchBar />
       {isLoged && (

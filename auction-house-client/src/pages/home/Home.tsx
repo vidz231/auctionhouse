@@ -1,9 +1,18 @@
+import { useEffect, useState } from "react";
 import Banner from "../../components/Banner";
 import AuctionItem from "./components/AuctionItem";
-import ProductItem from "./components/ProductItem";
+// import ProductItem from "./components/ProductItem";
 import SidebarItem from "./components/SidebarItem";
+import { GET } from "../../utils/request";
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const products = (await GET("/api/products?page=1"))._embedded.products;
+      setProducts(products);
+    })();
+  }, []);
   return (
     <div className="">
       <Banner />
@@ -12,28 +21,27 @@ export default function Home() {
           <div className="col-span-9">
             <div className="font-bold text-xl mb-4">Current live auction</div>
             <div className="grid grid-cols-2 gap-4">
-              <AuctionItem />
-              <AuctionItem />
-              <AuctionItem />
-              <AuctionItem />
-              <AuctionItem />
+              {products.map((product: any) => (
+                <AuctionItem key={product.id} product={product} />
+              ))}
             </div>
             <hr className="mt-8" />
             <div className="font-bold text-xl my-4">Upcoming auction</div>
             <div className="grid grid-cols-2 gap-4">
-              <AuctionItem />
-              <AuctionItem />
-              <AuctionItem />
-              <AuctionItem />
-              <AuctionItem />
+              {/* {products.map((product: any) => (
+                <AuctionItem key={product.id} product={product} />
+              ))} */}
             </div>
             <hr className="mt-8" />
             <div className="font-bold text-xl my-4">Featured product</div>
             <div className="grid grid-cols-2 gap-4">
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
+              {/* {products.map((product: any) => (
+                <AuctionItem key={product.id} product={product} />
+              ))} */}
+              {/* <ProductItem /> */}
+              {/* <ProductItem /> */}
+              {/* <ProductItem /> */}
+              {/* <ProductItem /> */}
             </div>
           </div>
           <div className="col-span-3">
