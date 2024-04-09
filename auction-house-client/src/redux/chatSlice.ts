@@ -13,6 +13,7 @@ export const chatSlice = createSlice({
     chatWith: (state, payload) => {
       state.isShowed = true;
       state.chattingWith = payload.payload;
+      console.log(payload);
     },
     hide: (state) => {
       state.isShowed = false;

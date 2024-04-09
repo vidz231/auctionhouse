@@ -10,11 +10,16 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Logout from "@mui/icons-material/Logout";
 import { setCookie } from "../utils/cookie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/authSlice";
+import { useEffect, useState } from "react";
+import { GET } from "../utils/request";
+import { getCookie } from "./../utils/cookie";
 
 export default function AccountMenu() {
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const username = getCookie("username");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -31,6 +36,14 @@ export default function AccountMenu() {
     setAnchorEl(null);
     navigate("/");
   };
+  useEffect(() => {
+    (async () => {
+      let avatarUrl = (
+        await GET(`/api/users/search/findByEmail?email=${username}`)
+      ).avatarUrl;
+      setAvatarUrl(avatarUrl);
+    })();
+  }, []);
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -43,7 +56,12 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar
+              sx={{ width: 32, height: 32 }}
+              src={avatarUrl}
+              alt={username}
+              className="border"
+            ></Avatar>
           </IconButton>
         </Tooltip>
       </Box>

@@ -7,8 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.sql.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,8 +63,6 @@ public class User {
   @Column(name = "is_banned", columnDefinition = "BIT DEFAULT 0")
   private Boolean isBanned;
 
-  
-
   @Column(name = "created_at")
   @CreationTimestamp
   private Date createdAt;
@@ -70,6 +70,10 @@ public class User {
   @Column(name = "updated_at")
   @UpdateTimestamp
   private Date updatedAt;
+
+  @OneToMany
+  @JoinColumn(name = "owner_id")
+  private List<Product> products;
 
   @ManyToOne
   @JoinColumn(name = "auth_type")

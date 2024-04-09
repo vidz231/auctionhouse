@@ -11,12 +11,12 @@ export default function Search() {
       <div className="col-span-10 px-2">
         <div className="py-4">Showing result for: "abcxyz"</div>
         <div className="grid grid-cols-4 gap-4">
+          {/* <ProductItem />
           <ProductItem />
           <ProductItem />
           <ProductItem />
           <ProductItem />
-          <ProductItem />
-          <ProductItem />
+          <ProductItem /> */}
         </div>
       </div>
     </div>

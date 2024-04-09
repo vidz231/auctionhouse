@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Banner from "../../components/Banner";
 import AuctionItem from "./components/AuctionItem";
-import ProductItem from "./components/ProductItem";
+// import ProductItem from "./components/ProductItem";
 import SidebarItem from "./components/SidebarItem";
 import { GET } from "../../utils/request";
 
@@ -9,9 +9,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   useEffect(() => {
     (async () => {
-      let products = (await GET("/api/products?page=1"))._embedded.products;
-      // products = await GET("/product/1");
-      // console.log(products);
+      const products = (await GET("/api/products?page=1"))._embedded.products;
       setProducts(products);
     })();
   }, []);

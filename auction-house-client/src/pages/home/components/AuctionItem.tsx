@@ -3,17 +3,15 @@ import { Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
 
 export default function AuctionItem({ product }: { product: any }) {
-  // console.log(product._links.image);
   const [image, setImage] = useState("");
   useEffect(() => {
     (async () => {
-      let imageLink = (product._links.image.href + "").replace(
-        "http://localhost:8080",
+      const imageLink = (product._links.image.href + "").replace(
+        import.meta.env.VITE_SERVER_URL,
         ""
       );
-      let image = (await GET(imageLink))._embedded.images[0];
-      console.log(image);
-      // setImage(image);
+      const image = (await GET(imageLink))._embedded.images[0].url;
+      setImage(image);
     })();
   }, []);
   // console.log(product.)
@@ -21,7 +19,7 @@ export default function AuctionItem({ product }: { product: any }) {
     <div className="border rounded-md bg-slate-100 flex gap-4">
       <div
         className="bg-red-300 aspect-square h-full"
-        style={{ backgroundImage: `url(${product.name})` }}
+        style={{ backgroundImage: `url(${image})` }}
       ></div>
       <div className="mt-2">
         <div className="font-bold truncate">{product.name}</div>
@@ -32,7 +30,7 @@ export default function AuctionItem({ product }: { product: any }) {
         </div>
         <div className="font-bold">${product.price}</div>
         <Link
-          to="/product"
+          to={`/product/${product.id}`}
           className="py-2 px-4 bg-blue-500 hover:bg-blue-400 rounded-md inline-block text-white font-bold my-2 text-sm"
         >
           Enter auction
