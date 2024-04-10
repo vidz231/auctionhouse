@@ -1,5 +1,6 @@
 package com.fptgang.auctionhouse.config;
 
+import com.fptgang.auctionhouse.model.Message;
 import com.fptgang.auctionhouse.model.Product;
 import com.fptgang.auctionhouse.model.User;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -17,6 +18,7 @@ public class RestConfig implements RepositoryRestConfigurer {
   ) {
     config.exposeIdsFor(Product.class);
     config.exposeIdsFor(User.class);
+    config.exposeIdsFor(Message.class);
     config.exposeRepositoryMethodsByDefault();
     cors
       .addMapping("/**")

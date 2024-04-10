@@ -58,7 +58,7 @@ const ReceiveItem = ({ message }: { message: string }) => {
     </div>
   );
 };
-
+let stompClient = null;
 export default function ChatBox() {
   const dispatch = useDispatch();
   const [userList, setUserList] = useState([]);
@@ -68,9 +68,109 @@ export default function ChatBox() {
   const showModal = useSelector((state: any) => state.chat.isShowed);
   const { chattingWith } = useSelector((state: any) => state.chat);
   const [receiver, setReceiver] = useState();
-  let stompClient = null;
+  const [sender, setSender] = useState();
   const [messageUI, setMessageUI] = useState([]);
   const messageEnd = useRef(null);
+
+  //> Connect
+  const connect = () => {
+    const Sock = new SockJS("http://localhost:8080/ws");
+    stompClient = over(Sock);
+    stompClient.connect({}, onConnected, onError);
+  };
+
+  const onConnected = () => {
+    stompClient.subscribe("/user/" + userId + "/private", onMessageReceive);
+  };
+
+  const onError = (error: any) => {
+    console.log(error);
+  };
+
+  // > UI render
+  const scrollToBottom = () => {
+    if (messageEnd.current) {
+      messageEnd.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  };
+
+  const renderUI = async () => {
+    const messageUI = await Promise.all(
+      messageList.map(async (item: any) => {
+        let senderId;
+        if (item.sender) {
+          senderId = item.sender.id;
+        } else {
+          senderId = (
+            await GET(
+              String(item._links.sender.href).replace(
+                import.meta.env.VITE_SERVER_URL,
+                ""
+              )
+            )
+          ).id;
+        }
+        return senderId === receiver.id ? (
+          <SendItem key={item.id} message={item.message} />
+        ) : (
+          <ReceiveItem key={item.id} message={item.message} />
+        );
+      })
+    );
+    setMessageUI(messageUI);
+  };
+
+  const handleChatModel = () => {
+    if (showModal) {
+      dispatch(hide());
+    } else {
+      dispatch(show());
+    }
+  };
+
+  // > Send message logic
+  const handleEnter = async (e: any) => {
+    if (e.key == "Enter" && message != "") {
+      const messageData = {
+        message,
+        sender: import.meta.env.VITE_SERVER_URL + `/users/${userId}`,
+        receiver: import.meta.env.VITE_SERVER_URL + `/users/${receiver.id}`,
+      };
+      const returnData = await POST("/api/messages", messageData);
+      setMessageList([...messageList, returnData]);
+      setMessage("");
+      const messageModified = {
+        id: returnData.id,
+        message,
+        receiver: {
+          id: receiver.id,
+        },
+        sender: {
+          id: sender.id,
+        },
+      };
+      if (stompClient) {
+        stompClient.send(
+          "/app/private-message",
+          {},
+          JSON.stringify(messageModified)
+        );
+      }
+    }
+  };
+
+  const onMessageReceive = async (payload: any) => {
+    // setMessageList((messageList) => [...messageList, JSON.parse(payload.body)]);
+    console.log(JSON.parse(payload.body));
+    const messageList = (
+      await GET(
+        `/api/messages/search/findMessagesBetweenUsers?userId1=${userId}&userId2=${
+          JSON.parse(payload.body).sender.id
+        }`
+      )
+    )._embedded.messages;
+    setMessageList(messageList);
+  };
 
   useEffect(() => {
     (async () => {
@@ -83,6 +183,8 @@ export default function ChatBox() {
       } else {
         receiver = await GET(`/api/users/${chattingWith}`);
       }
+      const sender = await GET(`/api/users/${userId}`);
+      setSender(sender);
       setReceiver(receiver);
       connect();
     })();
@@ -107,99 +209,21 @@ export default function ChatBox() {
         )
       )._embedded.messages;
       setMessageList(messageList);
-      const messageUI = await Promise.all(
-        messageList.map(async (item: any) => {
-          const senderId = (
-            await GET(
-              String(item._links.sender.href).replace(
-                import.meta.env.VITE_SERVER_URL,
-                ""
-              )
-            )
-          ).id;
-          return senderId === receiver.id ? (
-            <SendItem key={item.id} message={item.message} />
-          ) : (
-            <ReceiveItem key={item.id} message={item.message} />
-          );
-        })
-      );
-      setMessageUI(messageUI);
-      // console.log(messageEnd);
+      renderUI();
       scrollToBottom();
     })();
   }, [showModal, chattingWith]);
-
-  const scrollToBottom = () => {
-    if (messageEnd.current) {
-      messageEnd.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
-  };
-
-  const connect = () => {
-    const Sock = new SockJS("http://localhost:8080/ws");
-    stompClient = over(Sock);
-    stompClient.connect({}, onConnected, onError);
-  };
-
-  const onError = (error: any) => {
-    console.log(error);
-  };
-
-  const onConnected = () => {
-    stompClient.subscribe("/user/" + receiver.id + "/private");
-    console.log("connected with " + receiver.id + " ahiihi");
-  };
-
-  const handleChatModel = () => {
-    if (showModal) {
-      dispatch(hide());
-    } else {
-      dispatch(show());
-    }
-  };
 
   useEffect(() => {
     scrollToBottom();
   }, [messageUI]);
 
-  const handleEnter = async (e: any) => {
-    if (e.key == "Enter") {
-      const messageData = {
-        message,
-        sender: import.meta.env.VITE_SERVER_URL + `/users/${userId}`,
-        receiver: import.meta.env.VITE_SERVER_URL + `/users/${receiver.id}`,
-      };
-      const returnData = await POST("/api/messages", messageData);
-      setMessageList([...messageList, returnData]);
-      setMessage("");
-      const messageUI = await Promise.all(
-        [...messageList, returnData].map(async (item: any) => {
-          const senderId = (
-            await GET(
-              String(item._links.sender.href).replace(
-                import.meta.env.VITE_SERVER_URL,
-                ""
-              )
-            )
-          ).id;
-          return senderId === receiver.id ? (
-            <SendItem key={item.id} message={item.message} />
-          ) : (
-            <ReceiveItem key={item.id} message={item.message} />
-          );
-        })
-      );
-      setMessageUI(messageUI);
-      if (stompClient) {
-        stompClient.send(
-          "/app/private-message",
-          {},
-          JSON.stringify(returnData)
-        );
-      }
-    }
-  };
+  useEffect(() => {
+    // (async () => {
+    //   await renderUI();
+    // })();
+    renderUI();
+  }, [messageList]);
 
   return (
     <div className="fixed bottom-0 right-8">
@@ -244,7 +268,7 @@ export default function ChatBox() {
                 </div>
               </div>
               <div className="px-2 pt-3 flex flex-col gap-4 flex-shrink bg-yellow-400 h-[345px] overflow-y-scroll">
-                {messageList && receiver && messageUI}
+                {messageUI}
                 <div ref={messageEnd}></div>
               </div>
               <textarea
