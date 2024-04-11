@@ -6,7 +6,7 @@ import { GET } from "../../utils/request";
 
 export default function SellProduct() {
   const [product, setProduct] = useState();
-  const [image, setImage] = useState([]);
+  const [images, setImages] = useState([]);
   const [owner, setOwner] = useState();
   const { id } = useParams();
   window.scrollTo(0, 0);
@@ -14,10 +14,10 @@ export default function SellProduct() {
     (async () => {
       const product = await GET(`/api/products/${id}`);
       const owner = await GET(`/api/products/${id}/owner`);
-      const image = await GET(`/api/products/${id}/image`);
+      const images = await GET(`/api/products/${id}/images`);
       setProduct(product);
       setOwner(owner);
-      setImage(image._embedded.images.map((item: any) => item.url));
+      setImages(images._embedded.images.map((item: any) => item.url));
     })();
   }, []);
   return (
@@ -30,9 +30,8 @@ export default function SellProduct() {
       <div>
         <div className="rounded-md flex gap-4 mt-4 p-2">
           <div className="flex flex-col gap-4">
-            {image &&
-              image.length >= 2 &&
-              image
+            {images.length >= 2 &&
+              images
                 .slice(1)
                 .map((item) => (
                   <div
@@ -45,7 +44,7 @@ export default function SellProduct() {
           </div>
           <div
             className="bg-red-300 aspect-square h-[480px] bg-no-repeat bg-cover bg-center"
-            style={{ backgroundImage: `url(${image[0]})` }}
+            style={{ backgroundImage: `url(${images[0]})` }}
           ></div>
           <div className="mt-2 mx-4 text-xl flex flex-col gap-2">
             <div className="font-bold text-md">{product && product.name}</div>

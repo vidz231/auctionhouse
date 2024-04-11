@@ -4,6 +4,7 @@ import AuctionItem from "./components/AuctionItem";
 // import ProductItem from "./components/ProductItem";
 import SidebarItem from "./components/SidebarItem";
 import { GET } from "../../utils/request";
+import ProductItem from "./components/ProductItem";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -19,29 +20,25 @@ export default function Home() {
       <div>
         <div className="mt-4 grid grid-cols-12 gap-4">
           <div className="col-span-9">
-            <div className="font-bold text-xl mb-4">Current live auction</div>
+            {/* <div className="font-bold text-xl mb-4">Current live auction</div>
+            <div className="grid grid-cols-2 gap-4">
+              {products.map((product: any) => (
+                <AuctionItem key={product.id} product={product} />
+              ))}
+            </div> */}
+            <hr className="mt-8" />
+            <div className="font-bold text-xl my-4">Upcoming auction</div>
             <div className="grid grid-cols-2 gap-4">
               {products.map((product: any) => (
                 <AuctionItem key={product.id} product={product} />
               ))}
             </div>
             <hr className="mt-8" />
-            <div className="font-bold text-xl my-4">Upcoming auction</div>
-            <div className="grid grid-cols-2 gap-4">
-              {/* {products.map((product: any) => (
-                <AuctionItem key={product.id} product={product} />
-              ))} */}
-            </div>
-            <hr className="mt-8" />
             <div className="font-bold text-xl my-4">Featured product</div>
             <div className="grid grid-cols-2 gap-4">
-              {/* {products.map((product: any) => (
-                <AuctionItem key={product.id} product={product} />
-              ))} */}
-              {/* <ProductItem /> */}
-              {/* <ProductItem /> */}
-              {/* <ProductItem /> */}
-              {/* <ProductItem /> */}
+              {products.map((product: any) => (
+                <ProductItem key={product.id} product={product} />
+              ))}
             </div>
           </div>
           <div className="col-span-3">
