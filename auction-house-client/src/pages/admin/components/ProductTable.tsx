@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
+import { Pagination } from "@mui/material";
 
 const ProductItem = ({ product }: { product: any }) => {
   const [owner, setOwner] = useState("");
   useEffect(() => {
     (async () => {
-      let ownerLink = (product._links.owner.href + "").replace(
+      const ownerLink = (product._links.owner.href + "").replace(
         import.meta.env.VITE_SERVER_URL,
         ""
       );
-      let owner = (await GET(ownerLink)).name;
-      console.log(owner);
+      const owner = (await GET(ownerLink)).name;
       setOwner(owner);
     })();
   }, []);
@@ -38,13 +38,37 @@ const ProductItem = ({ product }: { product: any }) => {
 };
 
 export default function ProductTable() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const page = urlParams.get("page");
   const [products, setProducts] = useState([]);
+  const [pagination, setPagination] = useState({
+    size: 10,
+    totalElements: 1000,
+    totalPages: 20,
+    number: 1,
+  });
   useEffect(() => {
     (async () => {
-      let products = (await GET("/api/products?page=1"))._embedded.products;
+      let fetchUrl;
+      if (!page) {
+        fetchUrl = "/api/products?page=0";
+      } else {
+        fetchUrl = `/api/products?page=${page}`;
+      }
+      const data = await GET(fetchUrl);
+      const products = data._embedded.products;
+      const pagination = data.page;
+      pagination.totalPages--;
       setProducts(products);
+      setPagination(pagination);
     })();
   }, []);
+
+  const handlePageChange = async (e: any, value: any) => {
+    window.location.href =
+      import.meta.env.VITE_CLIENT_URL + `/admin/product?page=${value}`;
+  };
+
   return (
     <div>
       <div className="flex justify-between mr-4">
@@ -70,10 +94,22 @@ export default function ProductTable() {
           </thead>
           <tbody>
             {products.map((product: any) => (
-              <ProductItem product={product} />
+              <ProductItem key={product.id} product={product} />
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-end">
+        {pagination && (
+          <Pagination
+            page={pagination.number}
+            count={pagination.totalPages}
+            defaultPage={0}
+            shape="rounded"
+            className="my-4"
+            onChange={handlePageChange}
+          />
+        )}
       </div>
     </div>
   );

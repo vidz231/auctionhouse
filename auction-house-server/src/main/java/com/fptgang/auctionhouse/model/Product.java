@@ -1,5 +1,6 @@
 package com.fptgang.auctionhouse.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -17,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
@@ -34,7 +38,7 @@ public class Product {
 
   @ManyToOne
   @JoinColumn(name = "owner_id")
-  @JsonIncludeProperties({ "id", "name" })
+  //  @JsonIncludeProperties({ "id", "name" })
   private User owner;
 
   @Column(name = "name")
@@ -47,10 +51,12 @@ public class Product {
   @JoinColumn(name = "orchid_type")
   private Orchid orchid;
 
+  @NotNull(message = "no nulll pls")
   @Column(name = "description")
   private String description;
 
   @ManyToOne
+  @NotNull(message = "this field should not be null")
   @JoinColumn(name = "made_in")
   private Country madeIn;
 
@@ -70,11 +76,11 @@ public class Product {
   @Column(name = "is_deleted")
   private Boolean isDeleted;
 
-  @Column(name = "created_at")
-  @CreationTimestamp
+  @Column(name = "created_at", updatable = false)
+  @CreationTimestamp(source = SourceType.DB)
   private Date createdAt;
 
   @Column(name = "updated_at")
-  @UpdateTimestamp
+  @UpdateTimestamp(source = SourceType.DB)
   private Date updatedAt;
 }
